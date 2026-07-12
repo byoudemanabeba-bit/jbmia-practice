@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>JBMIA 練習アプリ</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#f3f5f8; --card:#fff; --text:#15171b; --muted:#687080;
+  --line:#d8dde6; --blue:#3867eb; --ok:#149447; --ng:#d43a3a;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#101216; --card:#1b1f27; --text:#f5f7fb; --muted:#9da5b5; --line:#353c49; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px}
+h1{font-size:20px;margin:0} .sub{font-size:12px;color:var(--muted);margin-top:4px}
+main{max-width:720px;margin:auto;padding:14px 12px 100px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.top{display:flex;align-items:center;gap:12px} .qno{font-size:24px;font-weight:900}
+.stats{margin-left:auto;color:var(--muted);font-size:13px}
+.category{font-size:13px;color:var(--blue);font-weight:800;margin-bottom:10px}
+.question{font-size:18px;line-height:1.7;font-weight:700;white-space:pre-wrap}
+.choices{display:grid;gap:10px;margin-top:16px}
+.choice{display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);font-size:16px;line-height:1.55}
+.choice .letter{flex:0 0 30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--line)}
+.choice.selected{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,var(--card))}
+.choice.selected .letter{background:var(--blue);color:white}
+.actions{display:flex;gap:10px;margin-top:14px} button{font:inherit}
+.action{flex:1;min-height:50px;border:0;border-radius:13px;font-weight:900}
+.clear{background:var(--line);color:var(--text)} .check{background:var(--blue);color:white}
+.result{margin-top:14px;min-height:55px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
+.result.ok{background:color-mix(in srgb,var(--ok) 17%,transparent);color:var(--ok)}
+.result.ng{background:color-mix(in srgb,var(--ng) 15%,transparent);color:var(--ng)}
+footer{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.navrow{max-width:720px;margin:auto;display:flex;gap:10px}
+.nav{flex:1;min-height:48px;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--text);font-weight:800}
+select{height:42px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);padding:0 10px;font:inherit}
+.small{font-size:12px;color:var(--muted);margin-top:10px}
+</style>
+</head>
+<body>
+<header><h1>JBMIA 練習アプリ・文字版</h1><div class="sub">試作：問題1〜10／Safari対応／○×判定のみ</div></header>
+<main>
+<section class="card">
+  <div class="top">
+    <div class="qno">問題 <span id="qno">1</span></div>
+    <select id="jump"></select>
+    <div class="stats">正解 <span id="correct">0</span>／回答 <span id="attempts">0</span></div>
+  </div>
+</section>
+<section class="card">
+  <div id="category" class="category"></div>
+  <div id="question" class="question"></div>
+  <div id="choices" class="choices"></div>
+  <div class="actions">
+    <button id="clear" class="action clear">選択解除</button>
+    <button id="check" class="action check">答える</button>
+  </div>
+  <div id="result" class="result"></div>
+  <div class="small">不正解時は正解の選択肢だけ表示します。解説はありません。</div>
+</section>
+</main>
+<footer><div class="navrow"><button id="prev" class="nav">← 前の問題</button><button id="next" class="nav">次の問題 →</button></div></footer>
+<script>
+const qs=[{"n": 1, "category": "JBMIA「MFP基礎（FAX）」", "text": "相手側にあらかじめ蓄積された原稿を取り出す機能。通常、通話料金は受信側が負担することになります。この機能名称を1つ選びなさい。", "choices": {"A": "フォールバック", "B": "ポーリング", "C": "トレーニング", "D": "プロトコル"}, "answer": ["B"]}, {"n": 2, "category": "JBMIA「MFP基礎（FAX）」", "text": "通信トラブル対処での基本的な考え方として、誤っているものを1つ選びなさい。", "choices": {"A": "使用している回線の特定を行う", "B": "ほぼ回線が悪いので、まずは通信業者に回線確認の依頼を行う", "C": "同時に複数のシステムデータは変更しない", "D": "電源環境の確認を行う"}, "answer": ["B"]}, {"n": 3, "category": "JBMIA「インターネットの基礎」", "text": "インターネット上のふるまいに関する説明として、不適切なものを1つ選びなさい。", "choices": {"A": "個人情報の登録・公開内容の取捨選択を行う", "B": "誤った情報を発信した場合はすぐに記事を削除し投稿しなかったことにする", "C": "投稿・コメントで差別的な表現や不当な批判は行わない", "D": "他のユーザーの個人情報の公開や、個人を特定できる情報を勝手に公開しない"}, "answer": ["B"]}, {"n": 4, "category": "JBMIA「インターネットの基礎」", "text": "コミュニケーションツールに関する記述として、不適切なものを1つ選びなさい。", "choices": {"A": "利用するうえでは、双方が同じツールを利用できる環境と利用するためのスキルを持っている必要がある", "B": "リアルタイムでの対話や迅速な情報伝達が必要な場合は、電話やチャット、Skypeを利用する", "C": "どのようなコミュニケーションツールでも、海外への連絡時は時差を考えなくてもよいという利点がある", "D": "あとで見直す機会がある情報をやり取りする場合は、なるべくメールを利用する"}, "answer": ["C"]}, {"n": 5, "category": "JBMIA「アプリケーションの基礎」", "text": "画像編集の手法である「トリミング」についての説明で、適切なものを1つ選びなさい。", "choices": {"A": "画像の倍率を変更する機能", "B": "画像の不要な部分を削除する機能", "C": "画像の解像度を変更する機能", "D": "画像の色合いを自動調整する機能"}, "answer": ["B"]}, {"n": 6, "category": "JBMIA「コンピューターの基礎」", "text": "ルーターが持つDHCP機能により設定されるパラメーターで、正しい組み合わせを1つ選びなさい。", "choices": {"A": "IPアドレス／サブネットマスク／デフォルトゲートウェイIPアドレス／DNSサーバーIPアドレス", "B": "IPアドレス／サブネットマスク／デフォルトゲートウェイIPアドレス／DNSサーバーMACアドレス", "C": "IPアドレス／サブネットマスク／Routingプロトコル／DNSサーバーIPアドレス", "D": "IPアドレス／ループバックアドレス／デフォルトゲートウェイIPアドレス／DNSサーバーIPアドレス"}, "answer": ["A"]}, {"n": 7, "category": "JBMIA「カラーDTP」", "text": "カラーの基礎知識についての説明で、誤っているものを1つ選びなさい。", "choices": {"A": "色を混ぜ合わせて別の色を作ることを混色という", "B": "色相環で90°に位置する関係の色の組み合わせを補色という", "C": "光の3原色はさまざまな色を混ぜ合わせるにつれ明るくなる", "D": "色の三属性「色相・明度・彩度」で規定できる色を有彩色という"}, "answer": ["B"]}, {"n": 8, "category": "JBMIA「カラーDTP」", "text": "デジタルカラー色表現方法「32ビットカラー」の説明で、誤っているものを1つ選びなさい。", "choices": {"A": "RGB各色256階調、最大1677万7216色を表現することができる", "B": "RGB24ビット＋カラープロファイルデータ8ビットです", "C": "RGB24ビット＋半透明処理や重ね合わせ処理のデータ8ビットです", "D": "RGB24ビット＋ダミーデータ8ビットです"}, "answer": ["B"]}, {"n": 9, "category": "JBMIA「MFP基礎」", "text": "MFP（複合機）で原稿給紙装置から複数原稿を連続で読取・コピーした時だけ、印刷物に汚れが発生しました。処置として適切なものを1つ選びなさい。", "choices": {"A": "露光ユニットのレーザー光射出部の清掃", "B": "現像器の交換", "C": "定着器付近の搬送ローラーの清掃", "D": "原稿台のガラス（縦長）の清掃"}, "answer": ["D"]}, {"n": 10, "category": "JBMIA「MFP基礎」", "text": "複合機（MFP）で印刷物の紙詰まりが発生する場合、本体以外の要因として考えられるものを1つ選びなさい。", "choices": {"A": "用紙カセットに規定量の半分までセットしている", "B": "同じ本体で印刷した裏紙を使用している", "C": "規格内の用紙を使用している", "D": "高温高湿、低温低湿等の特殊環境で使用している"}, "answer": ["D"]}];
+let idx=0, selected=new Set(), attempts=0, correct=0;
+const $=id=>document.getElementById(id);
+qs.forEach((q,i)=>{const o=document.createElement('option');o.value=i;o.textContent='問題 '+q.n;$('jump').appendChild(o);});
+function norm(v){return [...v].sort().join(',')}
+function render(){
+  const q=qs[idx];
+  $('qno').textContent=q.n;$('jump').value=idx;$('category').textContent=q.category;$('question').textContent=q.text;
+  selected.clear();$('choices').innerHTML='';$('result').textContent='';$('result').className='result';
+  Object.entries(q.choices).forEach(([k,v])=>{
+    const b=document.createElement('button');b.className='choice';b.innerHTML=`<span class="letter">${k}</span><span>${v}</span>`;
+    b.onclick=()=>{selected.has(k)?selected.delete(k):selected.add(k);b.classList.toggle('selected',selected.has(k));};
+    $('choices').appendChild(b);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$('check').onclick=()=>{
+  if(!selected.size){$('result').textContent='選択肢を選んでね';$('result').className='result ng';return}
+  attempts++;const q=qs[idx];const ok=norm(selected)===norm(new Set(q.answer));if(ok)correct++;
+  $('attempts').textContent=attempts;$('correct').textContent=correct;
+  $('result').textContent=ok?'○ 正解！':'× 不正解　正解：'+q.answer.join('・');
+  $('result').className='result '+(ok?'ok':'ng');
+};
+$('clear').onclick=()=>{selected.clear();document.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));$('result').textContent='';$('result').className='result'};
+$('prev').onclick=()=>{if(idx>0){idx--;render()}};
+$('next').onclick=()=>{if(idx<qs.length-1){idx++;render()}};
+$('jump').onchange=e=>{idx=Number(e.target.value);render()};
+render();
+</script>
+</body></html>
