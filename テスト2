@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JBMIA 練習問題</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #111318;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Yu Gothic", sans-serif;
+}
+
+.app {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+.subtitle {
+  margin-bottom: 18px;
+  color: #aab0bb;
+  font-size: 14px;
+}
+
+.card {
+  padding: 20px;
+  background: #1c2028;
+  border: 1px solid #343b47;
+  border-radius: 18px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.number {
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.score {
+  color: #aab0bb;
+  font-size: 13px;
+  text-align: right;
+}
+
+.category {
+  margin-bottom: 10px;
+  color: #6d91ff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.question {
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+  color: #ffffff;
+  background: #252a34;
+  border: 2px solid #
