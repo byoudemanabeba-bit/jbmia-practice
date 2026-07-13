@@ -1,1 +1,480 @@
-<html><body><h1>JBMIA</h1><p>問題1</p><button onclick="document.getElementById('r').textContent='❌'">A</button><button onclick="document.getElementById('r').textContent='⭕'">B</button><div id='r'></div></body></html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JBMIA 練習問題</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #111318;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Yu Gothic", sans-serif;
+}
+
+.app {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+.subtitle {
+  margin-bottom: 18px;
+  color: #aab0bb;
+  font-size: 14px;
+}
+
+.card {
+  padding: 20px;
+  background: #1c2028;
+  border: 1px solid #343b47;
+  border-radius: 18px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.number {
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.score {
+  color: #aab0bb;
+  font-size: 13px;
+  text-align: right;
+}
+
+.category {
+  margin-bottom: 10px;
+  color: #6d91ff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.question {
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+  color: #ffffff;
+  background: #252a34;
+  border: 2px solid #3b4350;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.choice:active {
+  transform: scale(0.99);
+}
+
+.choice.selected {
+  background: #253768;
+  border-color: #4c73ef;
+}
+
+.letter {
+  display: grid;
+  flex: 0 0 32px;
+  height: 32px;
+  place-items: center;
+  background: #3b4350;
+  border-radius: 50%;
+  font-weight: 900;
+}
+
+.choice.selected .letter {
+  background: #4c73ef;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.action {
+  flex: 1;
+  min-height: 50px;
+  border: 0;
+  border-radius: 13px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.clear {
+  color: #ffffff;
+  background: #3b4350;
+}
+
+.check {
+  color: #ffffff;
+  background: #4169e1;
+}
+
+.result {
+  min-height: 58px;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 13px;
+  font-size: 21px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.correct {
+  color: #5ee78e;
+  background: #173823;
+}
+
+.wrong {
+  color: #ff7b7b;
+  background: #401d1d;
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.nav {
+  flex: 1;
+  min-height: 48px;
+  color: #ffffff;
+  background: #252a34;
+  border: 1px solid #3b4350;
+  border-radius: 13px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.nav:disabled {
+  opacity: 0.35;
+}
+
+.finish {
+  padding: 30px 12px;
+  text-align: center;
+}
+
+.finish h2 {
+  font-size: 28px;
+}
+
+.restart {
+  width: 100%;
+  min-height: 52px;
+  color: #ffffff;
+  background: #4169e1;
+  border: 0;
+  border-radius: 13px;
+  font-size: 18px;
+  font-weight: 900;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <h1>JBMIA 練習問題</h1>
+  <div class="subtitle">問題1〜10・解説なし・○×判定</div>
+
+  <div class="card" id="app"></div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    category: 'JBMIA「MFP基礎（FAX）」',
+    text: '相手側にあらかじめ蓄積された原稿を取り出す機能です。通常、通話料金は受信側が負担します。この機能名称を1つ選びなさい。',
+    choices: [
+      'フォールバック',
+      'ポーリング',
+      'トレーニング',
+      'プロトコル'
+    ],
+    answer: 1
+  },
+  {
+    category: 'JBMIA「MFP基礎（FAX）」',
+    text: '通信トラブル対処での基本的な考え方として、誤っているものを1つ選びなさい。',
+    choices: [
+      '使用している回線の特定を行う',
+      'ほぼ回線が悪いので、まず通信業者に回線確認を依頼する',
+      '同時に複数のシステムデータは変更しない',
+      '電源環境の確認を行う'
+    ],
+    answer: 1
+  },
+  {
+    category: 'JBMIA「インターネットの基礎」',
+    text: 'インターネット上のふるまいに関する説明として、不適切なものを1つ選びなさい。',
+    choices: [
+      '個人情報の登録・公開内容の取捨選択を行う',
+      '誤った情報を発信した場合は、記事を削除して投稿しなかったことにする',
+      '投稿やコメントで差別的な表現や不当な批判を行わない',
+      '他人の個人情報を勝手に公開しない'
+    ],
+    answer: 1
+  },
+  {
+    category: 'JBMIA「インターネットの基礎」',
+    text: 'コミュニケーションツールに関する記述として、不適切なものを1つ選びなさい。',
+    choices: [
+      '双方が同じツールを利用できる環境とスキルを持つ必要がある',
+      'リアルタイムでの対話には電話やチャットなどを利用する',
+      '海外への連絡時は、どのツールでも時差を考えなくてよい',
+      'あとで見直す情報は、なるべくメールを利用する'
+    ],
+    answer: 2
+  },
+  {
+    category: 'JBMIA「アプリケーションの基礎」',
+    text: '画像編集の手法である「トリミング」の説明として、適切なものを1つ選びなさい。',
+    choices: [
+      '画像の倍率を変更する機能',
+      '画像の不要な部分を削除する機能',
+      '画像の解像度を変更する機能',
+      '画像の色合いを自動調整する機能'
+    ],
+    answer: 1
+  },
+  {
+    category: 'JBMIA「コンピューターの基礎」',
+    text: 'ルーターが持つDHCP機能により設定されるパラメーターで、正しい組み合わせを1つ選びなさい。',
+    choices: [
+      'IPアドレス・サブネットマスク・デフォルトゲートウェイ・DNSサーバー',
+      'IPアドレス・サブネットマスク・デフォルトゲートウェイ・DNSサーバーのMACアドレス',
+      'IPアドレス・サブネットマスク・Routingプロトコル・DNSサーバー',
+      'IPアドレス・ループバックアドレス・デフォルトゲートウェイ・DNSサーバー'
+    ],
+    answer: 0
+  },
+  {
+    category: 'JBMIA「カラーDTP」',
+    text: 'カラーの基礎知識についての説明で、誤っているものを1つ選びなさい。',
+    choices: [
+      '色を混ぜ合わせて別の色を作ることを混色という',
+      '色相環で90度に位置する関係の色を補色という',
+      '光の3原色は色を混ぜ合わせるにつれて明るくなる',
+      '色相・明度・彩度で規定できる色を有彩色という'
+    ],
+    answer: 1
+  },
+  {
+    category: 'JBMIA「カラーDTP」',
+    text: 'デジタルカラー色表現方法「32ビットカラー」の説明で、誤っているものを1つ選びなさい。',
+    choices: [
+      'RGB各色256階調で、最大1677万7216色を表現できる',
+      'RGB24ビットにカラープロファイルデータ8ビットを加えたもの',
+      'RGB24ビットに半透明処理などのデータ8ビットを加えたもの',
+      'RGB24ビットにダミーデータ8ビットを加えたもの'
+    ],
+    answer: 1
+  },
+  {
+    category: 'JBMIA「MFP基礎」',
+    text: '原稿給紙装置から複数原稿を連続で読み取り、コピーしたときだけ印刷物に汚れが発生しました。適切な処置を1つ選びなさい。',
+    choices: [
+      '露光ユニットのレーザー光射出部を清掃する',
+      '現像器を交換する',
+      '定着器付近の搬送ローラーを清掃する',
+      '原稿台の縦長のガラスを清掃する'
+    ],
+    answer: 3
+  },
+  {
+    category: 'JBMIA「MFP基礎」',
+    text: '複合機で紙詰まりが発生する場合、本体以外の要因として考えられるものを1つ選びなさい。',
+    choices: [
+      '用紙カセットに規定量の半分までセットしている',
+      '同じ本体で印刷した裏紙を使用している',
+      '規格内の用紙を使用している',
+      '高温高湿や低温低湿などの特殊環境で使用している'
+    ],
+    answer: 3
+  }
+];
+
+let current = 0;
+let selected = null;
+let answered = false;
+let correctCount = 0;
+let answerCount = 0;
+
+const app = document.getElementById('app');
+
+function render() {
+  const q = questions[current];
+
+  app.innerHTML = `
+    <div class="top">
+      <div class="number">問題 ${current + 1} / ${questions.length}</div>
+      <div class="score">
+        正解 ${correctCount}<br>
+        回答 ${answerCount}
+      </div>
+    </div>
+
+    <div class="category">${q.category}</div>
+
+    <div class="question">${q.text}</div>
+
+    <div id="choices"></div>
+
+    <div class="actions">
+      <button class="action clear" onclick="clearSelection()">選択解除</button>
+      <button class="action check" onclick="checkAnswer()">答える</button>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <div class="navigation">
+      <button class="nav"
+        onclick="previousQuestion()"
+        ${current === 0 ? 'disabled' : ''}>
+        ← 前の問題
+      </button>
+
+      <button class="nav"
+        onclick="nextQuestion()"
+        ${current === questions.length - 1 ? 'disabled' : ''}>
+        次の問題 →
+      </button>
+    </div>
+  `;
+
+  const choicesElement = document.getElementById('choices');
+
+  q.choices.forEach((choice, index) => {
+    const button = document.createElement('button');
+
+    button.className = 'choice';
+
+    button.innerHTML = `
+      <span class="letter">${String.fromCharCode(65 + index)}</span>
+      <span>${choice}</span>
+    `;
+
+    button.onclick = () => selectChoice(index, button);
+
+    choicesElement.appendChild(button);
+  });
+}
+
+function selectChoice(index, button) {
+  if (answered) {
+    return;
+  }
+
+  selected = index;
+
+  document.querySelectorAll('.choice').forEach(choice => {
+    choice.classList.remove('selected');
+  });
+
+  button.classList.add('selected');
+}
+
+function clearSelection() {
+  if (answered) {
+    return;
+  }
+
+  selected = null;
+
+  document.querySelectorAll('.choice').forEach(choice => {
+    choice.classList.remove('selected');
+  });
+
+  const result = document.getElementById('result');
+  result.textContent = '';
+  result.className = 'result';
+}
+
+function checkAnswer() {
+  const result = document.getElementById('result');
+
+  if (answered) {
+    return;
+  }
+
+  if (selected === null) {
+    result.textContent = '選択肢を選んでね';
+    result.className = 'result wrong';
+    return;
+  }
+
+  answered = true;
+  answerCount++;
+
+  if (selected === questions[current].answer) {
+    correctCount++;
+    result.textContent = '⭕ 正解！';
+    result.className = 'result correct';
+  } else {
+    const correctLetter =
+      String.fromCharCode(65 + questions[current].answer);
+
+    result.textContent = `❌ 不正解　正解：${correctLetter}`;
+    result.className = 'result wrong';
+  }
+}
+
+function previousQuestion() {
+  if (current > 0) {
+    current--;
+    selected = null;
+    answered = false;
+    render();
+    window.scrollTo(0, 0);
+  }
+}
+
+function nextQuestion() {
+  if (current < questions.length - 1) {
+    current++;
+    selected = null;
+    answered = false;
+    render();
+    window.scrollTo(0, 0);
+  }
+}
+
+render();
+</script>
+
+</body>
+</html>
