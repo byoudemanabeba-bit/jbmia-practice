@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JBMIA練習</title>
+<style>
+body{
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    max-width:700px;
+    margin:auto;
+    padding:20px;
+    background:#f5f5f5;
+}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+button{
+    width:100%;
+    padding:15px;
+    margin-top:10px;
+    font-size:18px;
+}
+#result{
+    margin-top:20px;
+    font-size:22px;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<h2>問題1</h2>
+
+<p>
+相手側にあらかじめ蓄積された原稿を取り出す機能は？
+</p>
+
+<button onclick="answer('A')">
+A フォールバック
+</button>
+
+<button onclick="answer('B')">
+B ポーリング
+</button>
+
+<button onclick="answer('C')">
+C トレーニング
+</button>
+
+<button onclick="answer('D')">
+D プロトコル
+</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+function answer(x){
+
+if(x=="B"){
+document.getElementById("result").innerHTML="⭕ 正解";
+}else{
+document.getElementById("result").innerHTML="❌ 不正解";
+}
+
+}
+
+</script>
+
+</body>
+</html>
